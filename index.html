@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>compresser</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <h1>compresser</h1>
+
+  <div class="card">
+    <label class="file-area" id="fileArea">
+      <input type="file" id="fileInput" accept="video/*,.mkv,.avi,.mov,.wmv,.flv,.webm">
+      <span id="fileName">Choose a video file</span>
+      <span id="fileSize"></span>
+    </label>
+  </div>
+
+  <div class="card" id="settingsCard">
+    <div class="row">
+      <div class="field">
+        <label for="crf">CRF</label>
+        <div class="crf-row">
+          <input type="range" id="crf" min="0" max="51" value="28">
+          <span id="crfValue">28</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="preset">preset</label>
+        <select id="preset">
+          <option>ultrafast</option>
+          <option>superfast</option>
+          <option>veryfast</option>
+          <option>faster</option>
+          <option>fast</option>
+          <option selected>medium</option>
+          <option>slow</option>
+          <option>slower</option>
+          <option>veryslow</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="audioBitrate">audio (kbps)</label>
+        <select id="audioBitrate">
+          <option>64</option>
+          <option selected>128</option>
+          <option>192</option>
+          <option>256</option>
+          <option>320</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="extraArgs">extra args</label>
+        <input type="text" id="extraArgs" placeholder="-- -vf scale=iw/2:ih/2">
+      </div>
+    </div>
+  </div>
+
+  <button id="compressBtn" disabled>compress</button>
+
+  <div id="progressWrap" class="hidden">
+    <div id="progressTrack"><div id="progressFill"></div></div>
+    <span id="progressText"></span>
+  </div>
+
+  <div id="result" class="hidden">
+    <a id="downloadLink" download>download compressed file</a>
+  </div>
+
+  <p id="status"></p>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
