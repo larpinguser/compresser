@@ -83,26 +83,35 @@ async function compress() {
 
   try {
     await ffmpeg.writeFile(inName, await fetchFile(selectedFile));
+  } catch (err) {
+    status.textContent = 'write error: ' + String(err);
+    return;
+  }
 
-    const args = [
-      '-i', inName,
-      '-c:v', 'libx264',
-      '-preset', preset.value,
-      '-crf', crf.value,
-      '-c:a', 'aac',
-      '-b:a', audioBitrate.value + 'k',
-    ];
+  const args = [
+    '-i', inName,
+    '-c:v', 'libx264',
+    '-preset', preset.value,
+    '-crf', crf.value,
+    '-c:a', 'aac',
+    '-b:a', audioBitrate.value + 'k',
+  ];
 
-    const extra = extraArgs.value.trim();
-    if (extra) {
-      const parsed = parseExtraArgs(extra);
-      args.push(...parsed);
-    }
+  const extra = extraArgs.value.trim();
+  if (extra) {
+    const parsed = parseExtraArgs(extra);
+    args.push(...parsed);
+  }
 
-    args.push('-y', outName);
+  args.push('-y', outName);
 
+  try {
     await ffmpeg.exec(args);
+  } catch (err) {
+    console.warn('exec threw (may be normal exit):', err);
+  }
 
+  try {
     const data = await ffmpeg.readFile(outName);
     const blob = new Blob([data]);
     const url = URL.createObjectURL(blob);
@@ -110,7 +119,7 @@ async function compress() {
     downloadLink.download = outName;
     result.classList.remove('hidden');
   } catch (err) {
-    status.textContent = 'error: ' + err.message;
+    status.textContent = 'error: ' + String(err);
   }
 
   compressBtn.disabled = false;
